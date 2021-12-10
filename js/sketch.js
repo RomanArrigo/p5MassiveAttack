@@ -1,11 +1,53 @@
-function setup() {
-    var canvas = createCanvas(800, 800);
-    canvas.parent("p5container");
+var mySong, amplitude, play;
+
+function preload(){
+    mySong = loadSound('assets/massiveAttackAngel.mp3');
 }
 
-function draw() {
-    background(220);
+function setup() {
+    var canvas = createCanvas(window.innerWidth, window.innerWidth);
+    canvas.parent("p5container");
+    amplitude = new p5.Amplitude();
+    background(0)
+    play = false;
+    button = createButton("Play");
+    button.addClass('btn');
+    button.center();
+    button.mousePressed(()=>{
+        play = true;
+        mySong.play();
+        button.hide();
+    });
+       
+}
 
-    fill(255, 255, 255);
-    ellipse(400, 400, 200);
+
+function draw() {
+
+    console.log(play);
+    if(play == true){
+    //console.log(amplitude.getLevel());
+    var level = amplitude.getLevel();
+    var vol = map(level, 0, 1, 0, 1000);
+    var col = map(level, 0, 1, 0, 255)
+    
+    background(col)
+
+    //console.log(vol);
+
+    if(vol > 200){
+        console.log("Kick Peak")
+        fill(col+10)
+        ellipse(width/2, height/2, vol + 100)
+    }    
+
+    fill(col, 100, 100);
+    ellipse(width/2, height/2, vol);
+
+    fill(100, col, 100);
+    ellipse(width/2, height/2, vol/2);
+    }
+
+    
+     
 }
